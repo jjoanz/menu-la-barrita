@@ -1,0 +1,9 @@
+{
+  "name": "menu-la-barrita",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Menú digital de La Barrita con panel admin y vista de proyección para Fire TV Stick",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

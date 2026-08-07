@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Barrita — Menú Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600;700;800;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+:root{
+  --red:#C8202A;--red-dk:#9B181F;--red-xdk:#6A0F14;
+  --grn:#1A5C2A;--grn-dk:#124018;--grn-lt:#2E8A45;
+  --gold:#E8B44C;--gold-l:#F5D07A;
+  --dark:#0C0906;--dark2:#140E08;--dark3:#1C1510;
+  --cream:#FFF8F0;--proj-txt:#F5EEE0;--muted:#8A7A5A;
+}
+body{font-family:'Montserrat',sans-serif;background:#f5f0e8;color:#2a1f0e}
+
+/* ══ NAV ══ */
+#nav{display:flex;align-items:center;background:var(--red-dk);padding:0 1.5rem;height:52px;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--red-xdk);gap:8px}
+.logo{font-family:'Dancing Script',cursive;color:#fff;font-size:1.4rem;font-weight:700;flex:1;letter-spacing:.02em;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.logo span{background:var(--grn);color:#fff;font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.1em;padding:2px 8px;border-radius:3px;vertical-align:middle;margin-left:6px;text-transform:uppercase;text-shadow:none}
+.nbtn{background:none;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.85);font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;padding:5px 14px;border-radius:4px;cursor:pointer;transition:all .2s;letter-spacing:.04em;text-transform:uppercase}
+.nbtn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.6)}
+.nbtn.active{background:#fff;color:var(--red-dk);border-color:#fff;font-weight:700}
+
+/* ══ ADMIN ══ */
+#admin-view{padding:2rem;max-width:1000px;margin:0 auto}
+.ah{margin-bottom:1.5rem}
+.ah h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;margin-bottom:3px}
+.ah p{color:var(--muted);font-size:.85rem}
+.rbar{background:#fff;border:1px solid #e8dfc8;border-radius:10px;padding:.9rem 1.25rem;margin-bottom:1.1rem;display:flex;align-items:center;gap:12px}
+.rbar label{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.rbar input{flex:1;border:1px solid #e0d4b8;border-radius:6px;padding:7px 11px;font-family:'Montserrat',sans-serif;font-size:.88rem;outline:none;background:#faf8f4}
+.rbar input:focus{border-color:var(--red)}
+.rbar button{background:var(--red-dk);color:#fff;border:none;padding:7px 18px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.04em;text-transform:uppercase}
+.rbar button:hover{background:var(--red)}
+.aform{background:#fff;border:1px solid #e8dfc8;border-radius:12px;padding:1.4rem;margin-bottom:1.4rem;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.aform h2{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;margin-bottom:.9rem;color:#1a1208}
+.frow{display:grid;gap:10px;margin-bottom:10px}
+.frow.c2{grid-template-columns:1fr 1fr}
+.frow.c3{grid-template-columns:2fr 1fr 1fr}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fg label{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{border:1px solid #e0d4b8;border-radius:6px;padding:7px 11px;font-family:'Montserrat',sans-serif;font-size:.85rem;background:#faf8f4;color:#1a1208;outline:none;transition:border .2s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--red);background:#fff}
+.fg textarea{resize:vertical;min-height:52px}
+.price-wrap{display:flex;align-items:stretch;border:1px solid #e0d4b8;border-radius:6px;overflow:hidden;background:#faf8f4;transition:border .2s}
+.price-wrap:focus-within{border-color:var(--red);background:#fff}
+.price-wrap .pfx{background:#f0e8d4;border-right:1px solid #e0d4b8;padding:0 10px;display:flex;align-items:center;font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:800;color:var(--red-dk);letter-spacing:.02em;white-space:nowrap;flex-shrink:0}
+.price-wrap input{border:none!important;border-radius:0!important;background:transparent!important;outline:none!important;flex:1;padding:7px 10px;font-family:'Montserrat',sans-serif;font-size:.85rem;color:#1a1208}
+.price-wrap input:focus{border:none!important;background:transparent!important}
+.imgph{width:82px;height:62px;border-radius:6px;background:#f0ead8;border:1.5px dashed #d0c4a0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;cursor:pointer;color:#b8a87a;transition:all .2s;flex-shrink:0;letter-spacing:.04em;text-transform:uppercase}
+.imgph:hover{border-color:var(--red);color:var(--red)}
+.imgprev{width:82px;height:62px;border-radius:6px;object-fit:cover;border:1px solid #e0d4b8;cursor:pointer;flex-shrink:0}
+.ffoot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px}
+.ochk{display:flex;align-items:center;gap:6px;font-size:.84rem;cursor:pointer;font-weight:500}
+.ochk input{width:16px;height:16px;accent-color:var(--red);cursor:pointer}
+.btna{background:var(--red-dk);color:#fff;border:none;padding:9px 24px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;margin-left:auto;letter-spacing:.04em;text-transform:uppercase}
+.btna:hover{background:var(--red)}
+.catf{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.cpill{background:#f5f0e8;border:1px solid #e0d4b8;border-radius:20px;padding:4px 14px;font-size:.75rem;cursor:pointer;color:var(--muted);font-weight:600;transition:all .2s;user-select:none;text-transform:uppercase;letter-spacing:.04em}
+.cpill:hover,.cpill.on{background:var(--red-dk);color:#fff;border-color:var(--red-dk)}
+.cs{margin-bottom:1.4rem}
+.ct{font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:800;color:#1a1208;margin-bottom:.6rem;padding-bottom:7px;border-bottom:3px solid var(--red);display:flex;align-items:center;gap:7px;letter-spacing:.04em;text-transform:uppercase}
+.ct .cc{background:#fff0ed;color:var(--red-dk);font-size:.68rem;padding:2px 8px;border-radius:12px;margin-left:auto;font-weight:700}
+.ic{background:#fff;border:1px solid #ece4d0;border-radius:8px;padding:10px 13px;margin-bottom:7px;display:flex;align-items:center;gap:10px;transition:all .2s}
+.ic:hover{border-color:var(--red);box-shadow:0 2px 8px rgba(200,32,42,.1)}
+.ic.off{opacity:.45}
+.icth{width:50px;height:40px;border-radius:5px;object-fit:cover;flex-shrink:0}
+.icthph{width:50px;height:40px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.icinfo{flex:1;min-width:0}
+.icname{font-weight:600;font-size:.85rem;color:#1a1208;margin-bottom:1px;display:flex;align-items:center;gap:6px}
+.obadge{background:#fff0ed;border:1px solid #f5a895;color:var(--red-dk);font-size:.62rem;padding:1px 7px;border-radius:10px;font-weight:700}
+.icdesc{font-size:.72rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icprice{font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;color:var(--grn-dk);white-space:nowrap;margin-right:5px}
+.icold{font-size:.72rem;color:var(--muted);text-decoration:line-through;margin-right:2px}
+.icact{display:flex;gap:5px}
+.ib{background:none;border:1px solid #e0d4b8;border-radius:5px;height:28px;padding:0 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;transition:all .2s;color:#6a5c3a;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+.ib:hover{border-color:var(--red);color:var(--red-dk)}
+.ib.del:hover{border-color:#c0392b;color:#c0392b;background:#fff5f5}
+.tog{font-size:.62rem;background:#e8f5ed;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;color:var(--grn-dk);font-family:'Montserrat',sans-serif;font-weight:700;white-space:nowrap;letter-spacing:.03em}
+.tog.off{background:#f0ede6;color:#999}
+.empty{color:var(--muted);font-size:.82rem;font-style:italic;padding:10px 0;text-align:center}
+
+/* ══ MODAL ══ */
+.mback{display:none;position:fixed;inset:0;background:rgba(255, 253, 253, 0.6);z-index:200;align-items:center;justify-content:center}
+.mback.open{display:flex}
+.modal{background:#fff;border-radius:14px;padding:1.75rem;width:92%;max-width:520px;box-shadow:0 24px 64px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:1rem;color:#1a1208}
+.mact{display:flex;gap:8px;justify-content:flex-end;margin-top:1.25rem}
+.btncnl{background:none;border:1px solid #e0d4b8;border-radius:6px;padding:7px 16px;font-family:'Montserrat',sans-serif;cursor:pointer;font-size:.82rem;font-weight:600}
+.btnsv{background:var(--red-dk);color:#fff;border:none;border-radius:6px;padding:7px 20px;font-family:'Montserrat',sans-serif;cursor:pointer;font-size:.82rem;font-weight:700;letter-spacing:.04em}
+
+/* ══════════════════════════════════════
+   P R O J E C T I O N
+══════════════════════════════════════ */
+#proj-view{
+  display:none;position:fixed;inset:0;top:52px;
+  background:var(--dark);z-index:10;overflow:hidden;
+}
+
+/* mode bar */
+.pbar{
+  position:absolute;top:0;left:0;right:0;height:48px;
+  background:rgba(6,3,1,.92);backdrop-filter:blur(10px);
+  border-bottom:2px solid var(--red-xdk);
+  padding:0 1.5rem;display:flex;align-items:center;gap:8px;z-index:20;
+}
+.pbrand{font-family:'Dancing Script',cursive;color:#fff;font-size:1.1rem;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.mbtn{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;padding:4px 14px;border-radius:4px;cursor:pointer;transition:all .2s;white-space:nowrap;letter-spacing:.05em;text-transform:uppercase}
+.mbtn:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.mbtn.active{background:var(--red);color:#fff;border-color:var(--red);font-weight:700}
+.fsbtn{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:.95rem;transition:all .2s}
+.fsbtn:hover{border-color:#fff;color:#fff}
+#proj-view:fullscreen .pbar,#proj-view:-webkit-full-screen .pbar{display:none}
+#proj-view:fullscreen .pcontent,#proj-view:-webkit-full-screen .pcontent{top:0}
+
+.pcontent{position:absolute;top:48px;left:0;right:0;bottom:0;overflow:hidden}
+
+/* ─────────────────
+   SLIDESHOW MODE
+───────────────── */
+#mode-slide{position:absolute;inset:0;display:none}
+#mode-slide.active{display:block}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;overflow:hidden;cursor:pointer}
+.slide.visible{opacity:1;z-index:2}
+.slide.out{opacity:0;z-index:1;transition:opacity .9s ease}
+.sbg{position:absolute;inset:0;background-size:cover;background-position:center}
+.sbg.kb{animation:kbz 9s ease-in-out forwards}
+@keyframes kbz{from{transform:scale(1)}to{transform:scale(1.06)}}
+.sgrad{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,
+    rgba(6,3,1,.3) 0%,rgba(6,3,1,.08) 30%,
+    rgba(6,3,1,.65) 68%,rgba(6,3,1,.97) 100%
+  );
+}
+/* red line top */
+.sline{position:absolute;top:0;left:0;right:0;height:5px;background:var(--red);z-index:3}
+.scattag{
+  position:absolute;top:1.75rem;left:1.75rem;
+  background:var(--grn);color:#fff;
+  font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;
+  padding:5px 16px;border-radius:4px;text-transform:uppercase;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.stext{position:absolute;bottom:0;left:0;right:0;padding:2rem 3rem 3rem}
+.sname{
+  font-family:'Playfair Display',serif;color:#fff;
+  font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:700;line-height:1.05;
+  margin-bottom:.5rem;text-shadow:0 2px 12px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(28px);
+  transition:opacity .65s ease .3s,transform .65s ease .3s;
+}
+.slide.visible .sname{opacity:1;transform:translateY(0)}
+.sdesc{
+  color:rgba(245,238,224,.65);font-size:clamp(.85rem,1.8vw,1.05rem);
+  font-family:'Montserrat',sans-serif;font-weight:400;
+  margin-bottom:1.4rem;max-width:60%;
+  opacity:0;transform:translateY(18px);
+  transition:opacity .5s ease .55s,transform .5s ease .55s;
+}
+.slide.visible .sdesc{opacity:1;transform:translateY(0)}
+.sprow{
+  display:flex;align-items:center;justify-content:space-between;
+  opacity:0;transition:opacity .5s ease .7s;
+}
+.slide.visible .sprow{opacity:1}
+.sprice{font-family:'Montserrat',sans-serif;color:var(--gold-l);font-size:clamp(1.8rem,4vw,3rem);font-weight:900;letter-spacing:-.01em}
+.soldp{font-family:'Montserrat',sans-serif;color:rgba(232,180,76,.4);font-size:1.3rem;text-decoration:line-through;margin-right:12px;font-weight:600}
+.sofftag{background:var(--red);color:#fff;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.1em;padding:6px 18px;border-radius:4px;text-transform:uppercase;box-shadow:0 2px 8px rgba(200,32,42,.4)}
+.sarr{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(200,32,42,.15);border:1px solid rgba(200,32,42,.4);
+  color:rgba(255,255,255,.7);font-size:1.5rem;width:48px;height:48px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;z-index:5;user-select:none;
+}
+.sarr:hover{background:rgba(200,32,42,.4);color:#fff;border-color:var(--red)}
+.sarr.left{left:1.5rem}.sarr.right{right:1.5rem}
+.sdots{position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
+.sdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .3s;cursor:pointer}
+.sdot.on{background:var(--red);width:22px;border-radius:3px}
+.sprogbar{position:absolute;bottom:0;left:0;height:4px;background:var(--red);width:0%;z-index:5}
+.sprogbar.run{transition:width linear}
+.scounter{position:absolute;top:1.75rem;right:1.75rem;background:rgba(6,3,1,.55);color:rgba(255,255,255,.5);font-size:.72rem;letter-spacing:.08em;padding:4px 14px;border-radius:20px;font-family:'Montserrat',sans-serif;font-weight:600}
+
+/* ─────────────────────────────────────────
+   LIST MODE  —  La Barrita brand, 32" TV
+───────────────────────────────────────── */
+#mode-list{
+  position:absolute;inset:0;display:none;overflow:hidden;
+  background:#0C0906;
+  /* subtle diagonal texture */
+  background-image:
+    repeating-linear-gradient(
+      45deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 1px,
+      transparent 1px,transparent 8px
+    );
+}
+#mode-list.active{display:flex;flex-direction:column}
+
+/* ── header band ── */
+.lb-header{
+  background:var(--red);
+  border-bottom:4px solid var(--red-xdk);
+  padding:.6rem 2rem;
+  display:flex;align-items:center;gap:1.5rem;
+  flex-shrink:0;
+}
+.lb-logo-wrap{display:flex;align-items:baseline;gap:.5rem}
+.lb-logo{font-family:'Dancing Script',cursive;color:#fff;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+.lb-cafe{
+  background:var(--grn);color:#fff;
+  font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:800;
+  letter-spacing:.12em;padding:3px 10px;border-radius:3px;text-transform:uppercase;
+  white-space:nowrap;margin-left:.25rem;align-self:center;
+}
+.lb-divider{width:2px;height:40px;background:rgba(255,255,255,.25);flex-shrink:0}
+.lb-tagline{color:rgba(255,255,255,.65);font-size:.7rem;font-weight:500;letter-spacing:.06em;font-family:'Montserrat',sans-serif;text-transform:uppercase}
+.lb-clock-wrap{margin-left:auto;text-align:right}
+.lb-time{font-family:'Montserrat',sans-serif;color:#fff;font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:800;display:block;line-height:1}
+.lb-date{font-family:'Montserrat',sans-serif;font-size:.65rem;color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase;display:block;margin-top:3px}
+
+/* ── scroll body ── */
+.lb-body{flex:1;overflow-y:auto;padding:1rem 1.5rem 1.5rem;display:flex;flex-direction:column;gap:1rem}
+.lb-body::-webkit-scrollbar{width:4px}
+.lb-body::-webkit-scrollbar-thumb{background:var(--red-xdk);border-radius:2px}
+
+/* ── menú del día ── */
+.lb-dia{
+  border:2px solid rgba(200,32,42,.4);border-radius:10px;overflow:hidden;flex-shrink:0;
+}
+.lb-dia-hdr{
+  background:var(--red);
+  padding:.5rem 1.25rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.lb-dia-hdr-title{
+  font-family:'Montserrat',sans-serif;color:#fff;
+  font-size:clamp(.8rem,2vw,1rem);font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;
+}
+.lb-dia-hdr-deco{flex:1;height:1px;background:rgba(255,255,255,.25);margin:0 .5rem}
+.lb-dia-hdr-icon{font-size:1.1rem}
+.lb-dia-items{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:0;
+  background:#160C06;
+}
+.lb-dia-item{
+  padding:.65rem 1rem;
+  border-right:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:center;gap:.75rem;
+}
+.lb-dia-item:last-child{border-right:none}
+.lb-dia-img{width:50px;height:50px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(200,32,42,.3)}
+.lb-dia-ph{width:50px;height:50px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1.5px solid rgba(200,32,42,.2)}
+.lb-dia-info{}
+.lb-dia-name{font-family:'Montserrat',sans-serif;color:var(--proj-txt);font-size:clamp(.85rem,1.8vw,1rem);font-weight:600;display:block;line-height:1.2}
+.lb-dia-desc{color:rgba(245,238,224,.4);font-size:.7rem;display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
+.lb-dia-price{font-family:'Montserrat',sans-serif;color:var(--gold-l);font-size:clamp(.9rem,2vw,1.1rem);font-weight:800;display:block;margin-top:3px}
+
+/* ── categories grid ── */
+.lb-cats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:.75rem;
+  flex:1;min-height:0;
+}
+.lb-cat{
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:8px;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.lb-cat-hdr{
+  background:var(--grn);
+  padding:.5rem 1rem;
+  display:flex;align-items:center;gap:.5rem;
+  flex-shrink:0;
+}
+.lb-cat-hdr-icon{font-size:1rem}
+.lb-cat-hdr-name{
+  font-family:'Montserrat',sans-serif;color:#fff;
+  font-size:clamp(.8rem,1.8vw,.95rem);font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.lb-cat-hdr-line{flex:1;height:1px;background:rgba(255,255,255,.2);margin-left:.5rem}
+.lb-cat-items{background:#120A05;flex:1}
+.lb-cat-item{
+  display:flex;align-items:center;
+  padding:.6rem 1rem;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  gap:.75rem;
+}
+.lb-cat-item:last-child{border-bottom:none}
+.lb-cat-img{width:46px;height:46px;border-radius:5px;object-fit:cover;flex-shrink:0}
+.lb-cat-ph{width:46px;height:46px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.lb-cat-body{flex:1;min-width:0}
+.lb-cat-name{
+  font-family:'Montserrat',sans-serif;color:var(--proj-txt);
+  font-size:clamp(.85rem,1.8vw,1rem);font-weight:600;
+  display:block;line-height:1.2;
+}
+.lb-cat-desc{color:rgba(245,238,224,.35);font-size:.68rem;display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-cat-price{
+  font-family:'Montserrat',sans-serif;color:var(--gold-l);
+  font-size:clamp(.9rem,2vw,1.05rem);font-weight:800;
+  white-space:nowrap;
+}
+/* red dot separator before price */
+.lb-cat-dots{
+  flex:1;min-width:8px;
+  border-bottom:1.5px dotted rgba(200,32,42,.25);
+  margin:0 6px 4px;
+  align-self:flex-end;
+}
+
+/* ── bottom strip ── */
+.lb-footer{
+  background:var(--red-xdk);
+  border-top:2px solid var(--red);
+  padding:.35rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.lb-footer-brand{font-family:'Dancing Script',cursive;color:rgba(255,255,255,.5);font-size:1rem;font-weight:700}
+.lb-footer-msg{font-family:'Montserrat',sans-serif;color:rgba(255,255,255,.4);font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+
+/* ─────────────────
+   OFFERS MODE
+───────────────── */
+#mode-offers{
+  position:absolute;inset:0;display:none;padding:1.25rem 1.75rem;overflow-y:auto;
+  background:
+    radial-gradient(ellipse at 15% 60%,rgba(200,32,42,.12) 0%,transparent 50%),
+    radial-gradient(ellipse at 85% 20%,rgba(26,92,42,.1) 0%,transparent 50%),
+    var(--dark);
+}
+#mode-offers.active{display:block}
+.offhdr{
+  text-align:center;margin-bottom:1.5rem;padding-bottom:.75rem;
+  border-bottom:2px solid rgba(200,32,42,.3);
+  position:relative;
+}
+.offhdr::before,.offhdr::after{
+  content:'';position:absolute;bottom:-2px;width:60px;height:2px;background:var(--red);
+}
+.offhdr::before{left:0}.offhdr::after{right:0}
+.offtitle{
+  font-family:'Montserrat',sans-serif;color:#fff;
+  font-size:clamp(1.4rem,3.5vw,2.2rem);font-weight:900;letter-spacing:.06em;
+  text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.75rem;
+}
+.offtitle::before,.offtitle::after{
+  content:'';display:inline-block;width:50px;height:2px;
+  background:var(--red);opacity:.6;
+}
+.offsub{color:rgba(245,238,224,.35);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;margin-top:.35rem;font-weight:500}
+.offgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:1.1rem}
+.offcard{border:1px solid rgba(200,32,42,.35);border-radius:12px;overflow:hidden;background:rgba(200,32,42,.06);transition:transform .25s;position:relative}
+.offcard:hover{transform:translateY(-3px)}
+.offimg{width:100%;height:190px;object-fit:cover;display:block}
+.offimgph{width:100%;height:190px;display:flex;align-items:center;justify-content:center;font-size:3.8rem}
+.offbody{padding:1rem 1.1rem}
+.offcatlbl{color:rgba(200,32,42,.7);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.3rem;display:block;font-weight:700}
+.offname{font-family:'Playfair Display',serif;color:var(--proj-txt);font-size:1.2rem;font-weight:600;margin-bottom:.35rem}
+.offdesc{color:rgba(245,238,224,.45);font-size:.78rem;margin-bottom:.75rem;font-family:'Montserrat',sans-serif}
+.offprices{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.offold{font-family:'Montserrat',sans-serif;color:rgba(245,238,224,.3);font-size:.95rem;text-decoration:line-through;font-weight:600}
+.offnew{font-family:'Montserrat',sans-serif;color:var(--gold-l);font-size:1.5rem;font-weight:900}
+.offbadge{background:var(--red);color:#fff;font-size:.6rem;font-weight:900;letter-spacing:.1em;padding:3px 10px;border-radius:3px;text-transform:uppercase;margin-left:auto}
+
+.pjempty{color:rgba(245,238,224,.25);text-align:center;padding:4rem 1rem;font-style:italic;font-size:.95rem;grid-column:1/-1}
+
+/* gradients */
+.bg-beb{background:linear-gradient(135deg,#0d1a2e,#1a3a6a)}
+.bg-jug{background:linear-gradient(135deg,#2e2400,#7a6200)}
+.bg-bat{background:linear-gradient(135deg,#2a0d2e,#6a1a6a)}
+.bg-san{background:linear-gradient(135deg,#2e1c0d,#6b3a1a)}
+.bg-com{background:linear-gradient(135deg,#2e0d0d,#6b1a1a)}
+.bg-otr{background:linear-gradient(135deg,#1a1a1a,#3a3a3a)}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div id="nav">
+  <div class="logo" id="nav-brand">La Barrita <span>Café & Food</span></div>
+  <button class="nbtn active" id="btn-admin" onclick="showView('admin')">Admin</button>
+  <button class="nbtn" id="btn-proj" onclick="showView('proj')">▶ Proyección</button>
+</div>
+
+<!-- ═══════════ ADMIN ═══════════ -->
+<div id="admin-view">
+  <div class="ah">
+    <h1>Panel de Administración — La Barrita</h1>
+    <p>Gestiona el menú · los cambios se sincronizan en tiempo real en ambas pantallas de proyección</p>
+  </div>
+
+  <div class="rbar">
+    <label>Nombre del restaurante</label>
+    <input type="text" id="rest-name" placeholder="La Barrita">
+    <button onclick="saveRestName()">Guardar nombre</button>
+  </div>
+
+  <div class="aform">
+    <h2>Agregar plato al menú</h2>
+    <div class="frow c3">
+      <div class="fg"><label>Nombre del plato *</label><input type="text" id="f-name" placeholder="Ej: Sopa de mariscos"></div>
+      <div class="fg"><label>Categoría *</label>
+        <select id="f-cat">
+          <option value="bebidas">Bebidas</option>
+          <option value="jugos">Jugos Naturales</option>
+          <option value="batidas">Batidas</option>
+          <option value="sandwiches">Sandwiches</option>
+          <option value="combinado">Plato Combinado</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
+      <div class="fg"><label>Precio</label><div class="price-wrap"><span class="pfx">RD$</span><input type="text" id="f-price" placeholder="350"></div></div>
+    </div>
+    <div class="frow c2">
+      <div class="fg"><label>Descripción</label><textarea id="f-desc" placeholder="Breve descripción del plato..."></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg"><label>Precio anterior (oferta)</label><div class="price-wrap"><span class="pfx">RD$</span><input type="text" id="f-oldprice" placeholder="450"></div></div>
+        <div class="fg">
+          <label>Imagen del plato</label>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div id="f-img-ph" class="imgph" onclick="document.getElementById('f-img-in').click()">Foto</div>
+            <span style="font-size:.72rem;color:var(--muted);line-height:1.4">Clic para<br>subir foto</span>
+          </div>
+          <input type="file" id="f-img-in" accept="image/*" style="display:none" onchange="previewImg(this,'f-img-ph','f-img-data')">
+          <input type="hidden" id="f-img-data">
+        </div>
+      </div>
+    </div>
+    <div class="ffoot">
+      <label class="ochk"><input type="checkbox" id="f-offer"> Marcar como oferta especial</label>
+      <button class="btna" onclick="addItem()">Agregar al Menú</button>
+    </div>
+  </div>
+
+  <div class="catf">
+    <div class="cpill on" onclick="filterCat(null,this)">Todos</div>
+    <div class="cpill" onclick="filterCat('bebidas',this)">Bebidas</div>
+    <div class="cpill" onclick="filterCat('jugos',this)">Jugos Naturales</div>
+    <div class="cpill" onclick="filterCat('batidas',this)">Batidas</div>
+    <div class="cpill" onclick="filterCat('sandwiches',this)">Sandwiches</div>
+    <div class="cpill" onclick="filterCat('combinado',this)">Plato Combinado</div>
+    <div class="cpill" onclick="filterCat('otros',this)">Otros</div>
+  </div>
+
+  <div id="item-list"></div>
+</div>
+
+<!-- ═══════════ PROJECTION ═══════════ -->
+<div id="proj-view">
+  <div class="pbar">
+    <div class="pbrand" id="pbrand">La Barrita</div>
+    <button class="mbtn active" id="mbtn-slide" onclick="setMode('slide')">Animado</button>
+    <button class="mbtn" id="mbtn-list"   onclick="setMode('list')">Lista</button>
+    <button class="mbtn" id="mbtn-offers" onclick="setMode('offers')">Ofertas</button>
+    <button class="fsbtn" onclick="toggleFS()" title="Pantalla completa">FS</button>
+  </div>
+
+  <div class="pcontent">
+
+    <!-- SLIDESHOW -->
+    <div id="mode-slide" class="active">
+      <div id="slides-wrap"></div>
+      <div class="sarr left" onclick="prevSlide()">&#8249;</div>
+      <div class="sarr right" onclick="nextSlide()">&#8250;</div>
+      <div class="sdots" id="sdots"></div>
+      <div class="sprogbar" id="sprog"></div>
+    </div>
+
+    <!-- LIST — La Barrita branded -->
+    <div id="mode-list">
+      <!-- header band -->
+      <div class="lb-header">
+        <div class="lb-logo-wrap">
+          <span class="lb-logo" id="lb-logo-txt">La Barrita</span>
+          <span class="lb-cafe">Café &amp; Food</span>
+        </div>
+        <div class="lb-divider"></div>
+        <div class="lb-tagline">Nuestro Menú</div>
+        <div class="lb-clock-wrap">
+          <span class="lb-time" id="ltime">--:--</span>
+          <span class="lb-date" id="ldate"></span>
+        </div>
+      </div>
+      <!-- scrollable content -->
+      <div class="lb-body" id="list-content"></div>
+      <!-- footer strip -->
+      <div class="lb-footer">
+        <span class="lb-footer-brand" id="lb-footer-brand">La Barrita</span>
+        <span class="lb-footer-msg">¡Bienvenidos a nuestra mesa!</span>
+        <span class="lb-footer-brand" style="opacity:.3">La Barrita</span>
+      </div>
+    </div>
+
+    <!-- OFFERS -->
+    <div id="mode-offers">
+      <div class="offhdr">
+        <div class="offtitle">Ofertas Especiales</div>
+        <div class="offsub">Promociones exclusivas de hoy</div>
+      </div>
+      <div class="offgrid" id="off-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="mback" id="emodal">
+  <div class="modal">
+    <h3>Editar plato</h3>
+    <input type="hidden" id="e-id">
+    <div class="frow c2">
+      <div class="fg"><label>Nombre *</label><input type="text" id="e-name"></div>
+      <div class="fg"><label>Categoría</label>
+        <select id="e-cat">
+          <option value="bebidas">Bebidas</option>
+          <option value="jugos">Jugos Naturales</option>
+          <option value="batidas">Batidas</option>
+          <option value="sandwiches">Sandwiches</option>
+          <option value="combinado">Plato Combinado</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow c2">
+      <div class="fg"><label>Precio</label><div class="price-wrap"><span class="pfx">RD$</span><input type="text" id="e-price"></div></div>
+      <div class="fg"><label>Precio anterior</label><div class="price-wrap"><span class="pfx">RD$</span><input type="text" id="e-oldprice"></div></div>
+    </div>
+    <div class="fg" style="margin-bottom:10px"><label>Descripción</label><textarea id="e-desc"></textarea></div>
+    <div style="display:flex;align-items:flex-end;gap:1rem;margin-bottom:10px">
+      <div class="fg">
+        <label>Imagen</label>
+        <div id="e-img-ph" class="imgph" onclick="document.getElementById('e-img-in').click()">Foto</div>
+        <input type="file" id="e-img-in" accept="image/*" style="display:none" onchange="previewImg(this,'e-img-ph','e-img-data')">
+        <input type="hidden" id="e-img-data">
+      </div>
+      <label class="ochk" style="margin-bottom:10px"><input type="checkbox" id="e-offer"> Es oferta especial</label>
+    </div>
+    <div class="mact">
+      <button class="btncnl" onclick="closeModal()">Cancelar</button>
+      <button class="btnsv" onclick="saveEdit()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CATS={
+  'bebidas':    {label:'Bebidas',            icon:'', bg:'bg-beb'},
+  'jugos':      {label:'Jugos Naturales',    icon:'', bg:'bg-jug'},
+  'batidas':    {label:'Batidas',            icon:'', bg:'bg-bat'},
+  'sandwiches': {label:'Sandwiches',         icon:'', bg:'bg-san'},
+  'combinado':  {label:'Plato Combinado',    icon:'', bg:'bg-com'},
+  'otros':      {label:'Otros',              icon:'', bg:'bg-otr'},
+};
+
+/* Menú inicial tomado de la foto del cartel físico.
+   ⚠ Precios marcados "REVISAR" vienen de una nota escrita a mano borrosa —
+   confírmalos y corrígelos en el panel Admin antes de publicar. */
+const DEFAULT_MENU=[
+  // BATIDAS (Leche Carnation)
+  {id:1001,name:'Fresa',cat:'batidas',price:'175',oldPrice:'',desc:'Leche Carnation',img:'',offer:false,active:true},
+  {id:1002,name:'Piña',cat:'batidas',price:'150',oldPrice:'',desc:'Leche Carnation',img:'',offer:false,active:true},
+  {id:1003,name:'Mango',cat:'batidas',price:'150',oldPrice:'',desc:'Leche Carnation',img:'',offer:false,active:true},
+  {id:1004,name:'Chinola',cat:'batidas',price:'150',oldPrice:'',desc:'Leche Carnation',img:'',offer:false,active:true},
+  {id:1005,name:'Guineo',cat:'batidas',price:'150',oldPrice:'',desc:'Leche Carnation',img:'',offer:false,active:true},
+  {id:1006,name:'Lechosa',cat:'batidas',price:'150',oldPrice:'',desc:'Leche Carnation',img:'',offer:false,active:true},
+  {id:1007,name:'Zapote',cat:'batidas',price:'150',oldPrice:'',desc:'Leche Carnation',img:'',offer:false,active:true},
+  // BEBIDAS
+  {id:1010,name:'Agua',cat:'bebidas',price:'25',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1011,name:'Café',cat:'bebidas',price:'50',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1012,name:'Capuccino',cat:'bebidas',price:'75',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1013,name:'Café Frío',cat:'bebidas',price:'150',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1014,name:'Gelatina de Flor de Jamaica',cat:'bebidas',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  // JUGOS NATURALES
+  {id:1020,name:'Fresa',cat:'jugos',price:'125',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1021,name:'Piña',cat:'jugos',price:'125',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1022,name:'Mango',cat:'jugos',price:'125',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1023,name:'Lechosa',cat:'jugos',price:'125',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1024,name:'Zapote',cat:'jugos',price:'125',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1025,name:'Fruit Ponch',cat:'jugos',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1026,name:'Tamarindo',cat:'jugos',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1027,name:'China',cat:'jugos',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1028,name:'Chinola',cat:'jugos',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1029,name:'Cereza',cat:'jugos',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1030,name:'Limón',cat:'jugos',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1031,name:'Naranja Agria',cat:'jugos',price:'100',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  // SANDWICHES — precios leídos de nota manuscrita borrosa, REVISAR
+  {id:1040,name:'Jamón & Queso',cat:'sandwiches',price:'115',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1041,name:'Doble Queso',cat:'sandwiches',price:'175',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1042,name:'Pollo & Queso Danés',cat:'sandwiches',price:'225',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1043,name:'Peperonni & Queso Danés',cat:'sandwiches',price:'225',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1044,name:'Bacon & Queso',cat:'sandwiches',price:'225',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1045,name:'Bacon, Pollo & Queso',cat:'sandwiches',price:'275',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1046,name:'Completo',cat:'sandwiches',price:'300',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1047,name:'Club Sandwich',cat:'sandwiches',price:'350',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  // PLATO COMBINADO — precio en nota manuscrita ilegible, REVISAR (dejado en 0)
+  {id:1050,name:'Chuleta de Cerdo',cat:'combinado',price:'300',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  {id:1051,name:'Pechuga de Pollo',cat:'combinado',price:'350',oldPrice:'',desc:'',img:'',offer:false,active:true},
+  // OTROS
+  {id:1060,name:'Yaroa',cat:'otros',price:'250',oldPrice:'',desc:'Papas fritas, Pollo & Queso',img:'',offer:false,active:true},
+  {id:1061,name:'Tacos Suave',cat:'otros',price:'250',oldPrice:'',desc:'2 tacos suaves & Papas frita',img:'',offer:false,active:true},
+];
+
+let menu=[],restName='La Barrita',activeFilter=null,mode='slide';
+let si=0,stimer=null;
+const DUR=6500;
+const bc=typeof BroadcastChannel!=='undefined'?new BroadcastChannel('labarrita_menu'):null;
+const API='/api/menu';
+
+/* DATA — se guarda localmente al instante (respaldo/offline) y se sincroniza con el servidor compartido */
+async function save(){
+  localStorage.setItem('lb_menu',JSON.stringify(menu));
+  localStorage.setItem('lb_name',restName);
+  renderAdmin();renderCurrent();
+  if(bc)bc.postMessage({type:'upd',menu,restName});
+  try{
+    await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({menu,restName})});
+  }catch(e){console.error('No se pudo guardar en el servidor, quedó solo local:',e);}
+}
+async function load(){
+  try{menu=JSON.parse(localStorage.getItem('lb_menu'))||[];}catch{menu=[];}
+  restName=localStorage.getItem('lb_name')||'La Barrita';
+  document.getElementById('rest-name').value=restName;
+  applyBranding();
+  try{
+    const r=await fetch(API,{cache:'no-store'});
+    if(r.ok){
+      const data=await r.json();
+      if(data&&Array.isArray(data.menu)&&data.menu.length){
+        menu=data.menu;restName=data.restName||restName;
+        localStorage.setItem('lb_menu',JSON.stringify(menu));
+        localStorage.setItem('lb_name',restName);
+        document.getElementById('rest-name').value=restName;
+        applyBranding();
+      }
+    }else{
+      console.error('API /api/menu respondió con estado',r.status);
+    }
+  }catch(e){console.error('No se pudo contactar el servidor, revisa que la función /api/menu esté desplegada:',e);}
+  if(!menu.length){
+    /* Servidor y local vacíos (o inaccesibles): sembrar el menú inicial de La Barrita */
+    menu=JSON.parse(JSON.stringify(DEFAULT_MENU));
+    save();
+  }
+  renderAdmin();renderCurrent();
+}
+
+/* POLLING — para que el Fire Stick (u otro dispositivo) refleje cambios sin recargar manualmente */
+let pollTimer=null;
+async function pollMenu(){
+  try{
+    const r=await fetch(API,{cache:'no-store'});
+    if(!r.ok)return;
+    const data=await r.json();
+    if(!data||!Array.isArray(data.menu))return;
+    const changed=JSON.stringify(data.menu)!==JSON.stringify(menu)||data.restName!==restName;
+    if(changed){
+      menu=data.menu;restName=data.restName||restName;
+      localStorage.setItem('lb_menu',JSON.stringify(menu));
+      localStorage.setItem('lb_name',restName);
+      document.getElementById('rest-name').value=restName;
+      applyBranding();renderAdmin();renderCurrent();
+    }
+  }catch(e){/* silencioso: mantiene lo último visto si falla la red */}
+}
+function startPolling(){
+  if(pollTimer)return;
+  pollTimer=setInterval(pollMenu,20000);
+}
+function saveRestName(){
+  restName=document.getElementById('rest-name').value.trim()||'La Barrita';
+  save();
+}
+function applyBranding(){
+  document.getElementById('pbrand').textContent=restName;
+  const lt=document.getElementById('lb-logo-txt');
+  const lf=document.getElementById('lb-footer-brand');
+  if(lt)lt.textContent=restName;
+  if(lf)lf.textContent=restName;
+}
+
+/* IMAGE */
+function previewImg(input,phId,dataId){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const cv=document.createElement('canvas');
+      let w=img.width,h=img.height,mw=750,mh=500;
+      if(w/h>mw/mh){h=h*(mw/w);w=mw;}else{w=w*(mh/h);h=mh;}
+      cv.width=Math.round(w);cv.height=Math.round(h);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      const d=cv.toDataURL('image/jpeg',.73);
+      document.getElementById(dataId).value=d;
+      const ph=document.getElementById(phId);
+      if(ph){
+        ph.outerHTML=`<img id="${phId}" class="imgprev" src="${d}" onclick="document.getElementById('${input.id}').click()">`;
+      }
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ADMIN */
+function addItem(){
+  const n=document.getElementById('f-name').value.trim();
+  if(!n){flash('f-name');return;}
+  menu.push({id:Date.now(),name:n,
+    cat:document.getElementById('f-cat').value,
+    price:document.getElementById('f-price').value.trim(),
+    oldPrice:document.getElementById('f-oldprice').value.trim(),
+    desc:document.getElementById('f-desc').value.trim(),
+    img:document.getElementById('f-img-data').value,
+    offer:document.getElementById('f-offer').checked,active:true});
+  ['f-name','f-price','f-oldprice','f-desc','f-img-data'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-offer').checked=false;
+  const ph=document.getElementById('f-img-ph');
+  if(ph&&ph.tagName==='IMG'){ph.outerHTML=`<div id="f-img-ph" class="imgph" onclick="document.getElementById('f-img-in').click()">Foto</div>`;}
+  save();
+}
+function flash(id){const el=document.getElementById(id);el.style.borderColor='#c8202a';setTimeout(()=>el.style.borderColor='',900);el.focus();}
+function delItem(id){if(!confirm('¿Eliminar este plato?'))return;menu=menu.filter(i=>i.id!==id);save();}
+function togItem(id){const it=menu.find(i=>i.id===id);if(it)it.active=!it.active;save();}
+function openEdit(id){
+  const it=menu.find(i=>i.id===id);if(!it)return;
+  document.getElementById('e-id').value=id;
+  document.getElementById('e-name').value=it.name;
+  document.getElementById('e-cat').value=it.cat;
+  document.getElementById('e-price').value=it.price||'';
+  document.getElementById('e-oldprice').value=it.oldPrice||'';
+  document.getElementById('e-desc').value=it.desc||'';
+  document.getElementById('e-offer').checked=!!it.offer;
+  document.getElementById('e-img-data').value=it.img||'';
+  const ph=document.getElementById('e-img-ph');
+  if(it.img){
+    if(ph)ph.outerHTML=`<img id="e-img-ph" class="imgprev" src="${it.img}" onclick="document.getElementById('e-img-in').click()">`;
+  }else{
+    if(ph&&ph.tagName==='IMG')ph.outerHTML=`<div id="e-img-ph" class="imgph" onclick="document.getElementById('e-img-in').click()">Foto</div>`;
+  }
+  document.getElementById('emodal').classList.add('open');
+}
+function saveEdit(){
+  const id=+document.getElementById('e-id').value;
+  const n=document.getElementById('e-name').value.trim();
+  if(!n){flash('e-name');return;}
+  const it=menu.find(i=>i.id===id);
+  if(it){
+    it.name=n;it.cat=document.getElementById('e-cat').value;
+    it.price=document.getElementById('e-price').value.trim();
+    it.oldPrice=document.getElementById('e-oldprice').value.trim();
+    it.desc=document.getElementById('e-desc').value.trim();
+    it.offer=document.getElementById('e-offer').checked;
+    const ni=document.getElementById('e-img-data').value;if(ni)it.img=ni;
+  }
+  closeModal();save();
+}
+function closeModal(){document.getElementById('emodal').classList.remove('open');}
+function filterCat(cat,el){
+  activeFilter=cat;
+  document.querySelectorAll('.cpill').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');renderAdmin();
+}
+function renderAdmin(){
+  applyBranding();
+  let html='';
+  Object.keys(CATS).forEach(cat=>{
+    if(activeFilter&&activeFilter!==cat)return;
+    const {label,icon,bg}=CATS[cat];
+    const items=menu.filter(i=>i.cat===cat);
+    html+=`<div class="cs"><div class="ct">${label}<span class="cc">${items.length}</span></div>`;
+    if(!items.length)html+=`<div class="empty">Sin platos en esta categoría</div>`;
+    else items.forEach(it=>{
+      const th=it.img?`<img class="icth" src="${it.img}" alt="">`:
+        `<div class="icthph ${bg}">${icon}</div>`;
+      html+=`<div class="ic${it.active?'':' off'}">
+        ${th}
+        <div class="icinfo">
+          <div class="icname">${escH(it.name)}${it.offer?'<span class="obadge">OFERTA</span>':''}</div>
+          ${it.desc?`<div class="icdesc">${escH(it.desc)}</div>`:''}
+        </div>
+        ${it.oldPrice?`<span class="icold">${fmtPrice(it.oldPrice)}</span>`:''}
+        ${it.price?`<span class="icprice">${fmtPrice(it.price)}</span>`:''}
+        <button class="tog${it.active?'':' off'}" onclick="togItem(${it.id})">${it.active?'Visible':'Oculto'}</button>
+        <div class="icact">
+          <button class="ib" onclick="openEdit(${it.id})" title="Editar">Editar</button>
+          <button class="ib del" onclick="delItem(${it.id})" title="Eliminar">Borrar</button>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('item-list').innerHTML=html;
+}
+
+/* VIEW / MODE */
+let currentView='admin';
+function showView(v){
+  currentView=v;
+  document.getElementById('admin-view').style.display=v==='admin'?'block':'none';
+  document.getElementById('proj-view').style.display=v==='proj'?'block':'none';
+  document.getElementById('btn-admin').classList.toggle('active',v==='admin');
+  document.getElementById('btn-proj').classList.toggle('active',v==='proj');
+  document.getElementById('nav').style.display=v==='proj'?'none':'';
+  document.getElementById('proj-view').style.top=v==='proj'?'0':'52px';
+  if(v==='proj')renderCurrent();
+}
+function setMode(m){
+  mode=m;
+  ['slide','list','offers'].forEach(n=>{
+    document.getElementById('mode-'+n).classList.toggle('active',n===m);
+    document.getElementById('mbtn-'+n).classList.toggle('active',n===m);
+  });
+  if(m==='slide')renderSlideshow();
+  else{stopSlide();renderCurrent();}
+}
+function renderCurrent(){
+  if(mode==='slide')renderSlideshow();
+  else if(mode==='list')renderList();
+  else renderOffers();
+}
+
+/* SLIDESHOW */
+function activeItems(){return menu.filter(i=>i.active);}
+function renderSlideshow(){
+  const items=activeItems();
+  const wrap=document.getElementById('slides-wrap');
+  const dots=document.getElementById('sdots');
+  if(!items.length){
+    wrap.innerHTML=`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(245,238,224,.25);font-style:italic;font-family:'Montserrat',sans-serif;">Sin platos en el menú</div>`;
+    dots.innerHTML='';stopSlide();return;
+  }
+  if(si>=items.length)si=0;
+  wrap.innerHTML=items.map((it,i)=>{
+    const {icon,label,bg}=CATS[it.cat]||{icon:'',label:'',bg:'bg-otr'};
+    const bgS=it.img?`background-image:url('${it.img}');background-size:cover;background-position:center;`:'';
+    const bgC=it.img?'':bg;
+    return `<div class="slide${i===si?' visible':''}" id="sl-${i}">
+      <div class="sline"></div>
+      <div class="sbg ${bgC}${i===si?' kb':''}" style="${bgS}"></div>
+      <div class="sgrad"></div>
+      <div class="scattag">${label}</div>
+      <div class="scounter">${i+1} / ${items.length}</div>
+      <div class="stext">
+        <div class="sname">${escH(it.name)}</div>
+        ${it.desc?`<div class="sdesc">${escH(it.desc)}</div>`:''}
+        <div class="sprow">
+          <div style="display:flex;align-items:baseline;gap:14px">
+            ${it.oldPrice?`<span class="soldp">${fmtPrice(it.oldPrice)}</span>`:''}
+            ${it.price?`<span class="sprice">${fmtPrice(it.price)}</span>`:''}
+          </div>
+          ${it.offer?`<span class="sofftag">Oferta especial</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  dots.innerHTML=items.map((_,i)=>`<div class="sdot${i===si?' on':''}" onclick="goSlide(${i})"></div>`).join('');
+  startSlide();
+}
+function goSlide(idx){
+  const items=activeItems();if(!items.length)return;
+  const prev=document.getElementById('sl-'+si);
+  if(prev){prev.classList.remove('visible');prev.classList.add('out');setTimeout(()=>prev.classList.remove('out'),950);}
+  si=((idx%items.length)+items.length)%items.length;
+  const next=document.getElementById('sl-'+si);
+  if(next){
+    next.classList.add('visible');
+    const bg=next.querySelector('.sbg');
+    if(bg){bg.classList.remove('kb');void bg.offsetWidth;bg.classList.add('kb');}
+  }
+  document.querySelectorAll('.sdot').forEach((d,i)=>d.classList.toggle('on',i===si));
+  resetProg();
+}
+function nextSlide(){goSlide(si+1);}
+function prevSlide(){goSlide(si-1);}
+function startSlide(){
+  stopSlide();
+  if(mode!=='slide')return;
+  if(activeItems().length<2)return;
+  resetProg();
+  stimer=setInterval(()=>goSlide(si+1),DUR);
+}
+function stopSlide(){
+  if(stimer){clearInterval(stimer);stimer=null;}
+  const p=document.getElementById('sprog');
+  if(p){p.className='sprogbar';p.style.width='0%';}
+}
+function resetProg(){
+  const p=document.getElementById('sprog');if(!p)return;
+  p.className='sprogbar';p.style.width='0%';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    p.className='sprogbar run';
+    p.style.transition=`width ${DUR}ms linear`;
+    p.style.width='100%';
+  }));
+}
+
+/* LIST — La Barrita */
+function renderList(){
+  applyBranding();
+  const active=menu.filter(i=>i.active);
+  const el=document.getElementById('list-content');
+  if(!active.length){el.innerHTML=`<div style="color:rgba(245,238,224,.25);text-align:center;padding:3rem;font-style:italic;">Sin platos disponibles</div>`;return;}
+  let html='';
+
+  const rest=Object.keys(CATS).filter(c=>active.some(i=>i.cat===c));
+  if(rest.length){
+    html+=`<div class="lb-cats">`;
+    rest.forEach(cat=>{
+      const {label,icon,bg}=CATS[cat];
+      html+=`<div class="lb-cat"><div class="lb-cat-hdr"><span class="lb-cat-hdr-name">${label}</span><div class="lb-cat-hdr-line"></div></div><div class="lb-cat-items">`;
+      active.filter(i=>i.cat===cat).forEach(it=>{
+        const img=it.img?`<img class="lb-cat-img" src="${it.img}" alt="">`:
+          `<div class="lb-cat-ph ${bg}"></div>`;
+        html+=`<div class="lb-cat-item">${img}<div class="lb-cat-body"><span class="lb-cat-name">${escH(it.name)}</span>${it.desc?`<span class="lb-cat-desc">${escH(it.desc)}</span>`:''}</div>${it.price?`<div class="lb-cat-dots"></div><span class="lb-cat-price">${fmtPrice(it.price)}</span>`:''}</div>`;
+      });
+      html+=`</div></div>`;
+    });
+    html+=`</div>`;
+  }
+  el.innerHTML=html;
+}
+
+/* OFFERS */
+function renderOffers(){
+  const offs=menu.filter(i=>i.active&&i.offer);
+  const el=document.getElementById('off-grid');
+  if(!offs.length){
+    el.innerHTML=`<div class="pjempty">No hay ofertas especiales configuradas.<br><small style="font-size:.75rem;opacity:.6">Marca platos como "oferta especial" en el panel admin</small></div>`;
+    return;
+  }
+  el.innerHTML=offs.map(it=>{
+    const {icon,label,bg}=CATS[it.cat]||{icon:'',label:'',bg:'bg-otr'};
+    const img=it.img?`<img class="offimg" src="${it.img}" alt="">`:
+      `<div class="offimgph ${bg}"></div>`;
+    return `<div class="offcard">${img}<div class="offbody"><span class="offcatlbl">${label}</span><div class="offname">${escH(it.name)}</div>${it.desc?`<div class="offdesc">${escH(it.desc)}</div>`:''}<div class="offprices">${it.oldPrice?`<span class="offold">${fmtPrice(it.oldPrice)}</span>`:''}${it.price?`<span class="offnew">${fmtPrice(it.price)}</span>`:''}<span class="offbadge">Oferta</span></div></div></div>`;
+  }).join('');
+}
+
+/* CLOCK */
+function tick(){
+  const n=new Date();
+  const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  const days=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const mths=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const d=days[n.getDay()]+' '+n.getDate()+' '+mths[n.getMonth()];
+  const lt=document.getElementById('ltime');const ld=document.getElementById('ldate');
+  if(lt)lt.textContent=t;if(ld)ld.textContent=d;
+}
+
+/* FULLSCREEN */
+function toggleFS(){
+  const el=document.getElementById('proj-view');
+  if(!document.fullscreenElement)el.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen().catch(()=>{});
+}
+document.addEventListener('fullscreenchange',()=>{
+  const fs=!!document.fullscreenElement;
+  document.getElementById('proj-view').style.top=(fs||currentView==='proj')?'0':'52px';
+});
+
+/* KEYBOARD */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.fullscreenElement)document.exitFullscreen();
+    else if(currentView==='proj')showView('admin');
+  }
+  if(e.key==='ArrowRight'&&mode==='slide')nextSlide();
+  if(e.key==='ArrowLeft'&&mode==='slide')prevSlide();
+});
+
+/* BROADCAST */
+if(bc)bc.onmessage=e=>{
+  if(e.data?.type==='upd'){
+    menu=e.data.menu;restName=e.data.restName||restName;
+    document.getElementById('rest-name').value=restName;
+    renderAdmin();renderCurrent();
+  }
+};
+
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtPrice(p){
+  if(!p)return '';
+  const s=p.trim();
+  if(s.toUpperCase().startsWith('RD$')||s.startsWith('$'))return escH(s);
+  return 'RD$'+escH(s);
+}
+
+/* INIT */
+load();renderAdmin();renderSlideshow();
+setInterval(tick,1000);tick();
+startPolling();
+if(new URLSearchParams(location.search).get('tv')==='1'){
+  showView('proj');
+}
+</script>
+</body>
+</html>
