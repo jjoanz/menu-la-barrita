@@ -837,8 +837,7 @@ function showView(v){
   document.getElementById('proj-view').style.display=v==='proj'?'block':'none';
   document.getElementById('btn-admin').classList.toggle('active',v==='admin');
   document.getElementById('btn-proj').classList.toggle('active',v==='proj');
-  document.getElementById('nav').style.display=v==='proj'?'none':'';
-  document.getElementById('proj-view').style.top=v==='proj'?'0':'52px';
+  document.getElementById('proj-view').style.top='52px';
   if(v==='proj')renderCurrent();
 }
 function setMode(m){
@@ -992,7 +991,8 @@ function toggleFS(){
 }
 document.addEventListener('fullscreenchange',()=>{
   const fs=!!document.fullscreenElement;
-  document.getElementById('proj-view').style.top=(fs||currentView==='proj')?'0':'52px';
+  document.getElementById('nav').style.display=fs?'none':'';
+  document.getElementById('proj-view').style.top=fs?'0':'52px';
 });
 
 /* KEYBOARD */
