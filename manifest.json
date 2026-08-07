@@ -1,0 +1,12 @@
+{
+  "name": "La Barrita Café & Food — Menú Digital",
+  "short_name": "La Barrita",
+  "description": "Menú digital de La Barrita Café & Food",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f0e8",
+  "theme_color": "#9B181F",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

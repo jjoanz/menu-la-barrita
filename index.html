@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La Barrita — Menú Digital</title>
+<title>La Barrita Café & Food — Menú Digital</title>
+<meta name="description" content="Menú digital de La Barrita Café & Food: bebidas, jugos naturales, batidas, sandwiches, platos combinados y ofertas del día.">
+<meta name="theme-color" content="#9B181F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="manifest" href="/manifest.json">
+<meta property="og:title" content="La Barrita Café & Food — Menú Digital">
+<meta property="og:description" content="Consulta nuestro menú y ofertas del día.">
+<meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600;700;800;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -392,8 +400,8 @@ body{font-family:'Montserrat',sans-serif;background:#f5f0e8;color:#2a1f0e}
 <!-- NAV -->
 <div id="nav">
   <div class="logo" id="nav-brand">La Barrita <span>Café & Food</span></div>
-  <button class="nbtn active" id="btn-admin" onclick="showView('admin')">Admin</button>
-  <button class="nbtn" id="btn-proj" onclick="showView('proj')">▶ Proyección</button>
+  <button class="nbtn" id="btn-admin" onclick="gateAdmin()">Admin</button>
+  <button class="nbtn active" id="btn-proj" onclick="showView('proj')">▶ Proyección</button>
 </div>
 
 <!-- ═══════════ ADMIN ═══════════ -->
@@ -807,6 +815,20 @@ function renderAdmin(){
   document.getElementById('item-list').innerHTML=html;
 }
 
+/* ADMIN GATE */
+const ADMIN_PASSWORD='Vida2020.';
+function gateAdmin(){
+  if(sessionStorage.getItem('lb_admin_ok')==='1'){showView('admin');return;}
+  const pw=prompt('Contraseña de administrador:');
+  if(pw===null)return;
+  if(pw===ADMIN_PASSWORD){
+    sessionStorage.setItem('lb_admin_ok','1');
+    showView('admin');
+  }else{
+    alert('Contraseña incorrecta.');
+  }
+}
+
 /* VIEW / MODE */
 let currentView='admin';
 function showView(v){
@@ -977,7 +999,7 @@ document.addEventListener('fullscreenchange',()=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     if(document.fullscreenElement)document.exitFullscreen();
-    else if(currentView==='proj')showView('admin');
+    else if(currentView==='proj')gateAdmin();
   }
   if(e.key==='ArrowRight'&&mode==='slide')nextSlide();
   if(e.key==='ArrowLeft'&&mode==='slide')prevSlide();
@@ -1004,9 +1026,7 @@ function fmtPrice(p){
 load();renderAdmin();renderSlideshow();
 setInterval(tick,1000);tick();
 startPolling();
-if(new URLSearchParams(location.search).get('tv')==='1'){
-  showView('proj');
-}
+showView('proj');
 </script>
 </body>
 </html>

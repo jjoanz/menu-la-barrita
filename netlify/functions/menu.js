@@ -1,7 +1,16 @@
 const { getStore } = require('@netlify/blobs');
 
+function getMenuStore() {
+  const siteID = process.env.BLOBS_SITE_ID;
+  const token = process.env.BLOBS_TOKEN;
+  if (siteID && token) {
+    return getStore({ name: 'la-barrita', siteID, token });
+  }
+  return getStore('la-barrita');
+}
+
 exports.handler = async (event) => {
-  const store = getStore('la-barrita');
+  const store = getMenuStore();
 
   const headers = {
     'Content-Type': 'application/json',
