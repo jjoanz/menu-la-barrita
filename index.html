@@ -320,6 +320,8 @@ body.is-fs .pcontent{top:0}
   font-family:'Playfair Display',serif;color:var(--proj-ink);
   font-size:clamp(.9rem,1.9vw,1.4rem);font-weight:700;
   letter-spacing:.04em;text-transform:uppercase;
+  min-width:0;line-height:1.15;
+  hyphens:auto;-webkit-hyphens:auto;overflow-wrap:normal;
 }
 .lb-cat-hdr-line{flex:1;height:1px;background:var(--oliv);opacity:.4;margin-left:.4rem}
 .lb-cat-items{flex:1}
@@ -334,9 +336,9 @@ body.is-fs .pcontent{top:0}
 .lb-cat-name{
   font-family:'Montserrat',sans-serif;color:var(--proj-ink);
   font-size:clamp(.8rem,1.7vw,1.15rem);font-weight:600;
-  display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  display:block;line-height:1.2;
 }
-.lb-cat-desc{color:var(--proj-ink-soft);font-size:clamp(.66rem,1.1vw,.88rem);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-cat-desc{color:var(--proj-ink-soft);font-size:clamp(.66rem,1.1vw,.88rem);display:block;line-height:1.2}
 .lb-cat-price{
   font-family:'Montserrat',sans-serif;color:var(--proj-ink);
   font-size:clamp(.85rem,1.8vw,1.25rem);font-weight:800;
