@@ -28,7 +28,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(data || { menu: [], restName: 'La Barrita' }),
+      body: JSON.stringify(data || { menu: [], restName: 'La Barrita', catImg: {} }),
     };
   }
 
@@ -42,7 +42,7 @@ exports.handler = async (event) => {
     if (!body || !Array.isArray(body.menu)) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Formato inválido: se esperaba { menu: [...], restName: "..." }' }) };
     }
-    await store.setJSON('menu', { menu: body.menu, restName: body.restName || 'La Barrita' });
+    await store.setJSON('menu', { menu: body.menu, restName: body.restName || 'La Barrita', catImg: body.catImg || {} });
     return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
   }
 
