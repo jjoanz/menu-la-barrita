@@ -1,15 +1,21 @@
 # Menú Digital — La Barrita
 
 ## Qué cambió respecto al archivo original
-- `save()` / `load()` ya no usan solo `localStorage`: ahora también leen/escriben en `/api/menu`,
-  que es una Netlify Function respaldada por **Netlify Blobs** (almacenamiento compartido entre todos
-  los dispositivos que abran el sitio).
+- `save()` / `load()` ya no usan solo `localStorage`: ahora también leen/escriben directo en
+  **Supabase** (tablas `menu_items` y `menu_settings`, más el bucket `menu-photos` para las fotos) —
+  almacenamiento compartido entre todos los dispositivos que abran el sitio. La conexión se hace
+  con el cliente `@supabase/supabase-js` cargado por CDN, usando la `anon public key` embebida en
+  `index.html` (es segura de exponer: el acceso real lo controlan las políticas RLS de las tablas).
 - `localStorage` se mantiene como caché local (por si se cae la red un instante), pero la fuente
-  de verdad ahora es el servidor.
-- Se agregó **polling cada 20 segundos**: cualquier pantalla abierta (ej. el Fire Stick) revisa el
-  servidor y se actualiza sola si detecta cambios — sin necesidad de recargar manualmente.
+  de verdad ahora es Supabase.
+- Las fotos (de plato y de categoría) se redimensionan/comprimen en el navegador (canvas) y se suben
+  como archivo real al bucket `menu-photos`; solo la URL pública se guarda en la fila — ya no viajan
+  como base64 gigante dentro del JSON.
+- Se agregó **polling cada 20 segundos**: cualquier pantalla abierta (ej. el Fire Stick) revisa
+  Supabase y se actualiza sola si detecta cambios — sin necesidad de recargar manualmente.
 - Se agregó un parámetro `?tv=1` en la URL: si lo agregas, la página abre directo en modo
   **Proyección** (útil para el Fire Stick, así no hay que tocar nada al encenderlo).
+- Netlify solo sirve el sitio estático (ya no hay funciones serverless ni Netlify Blobs).
 
 ## 1. Desplegar con Netlify CLI (una sola vez la instalación)
 
@@ -21,31 +27,27 @@ netlify login
 Dentro de esta carpeta (`menu-la-barrita`):
 
 ```powershell
-npm install
 netlify link
 ```
 
 `netlify link` te va a preguntar a qué sitio existente conectar esta carpeta — elige el sitio
-donde ya tienes `menu-la-barrita.html` subido por drag & drop.
+donde ya tienes el sitio desplegado.
 
-Luego, cada vez que quieras actualizar el sitio (en vez de arrastrar la carpeta):
+Luego, cada vez que quieras actualizar el sitio:
 
 ```powershell
 netlify deploy --prod
 ```
 
-Esto sube el HTML **y** la función serverless con Netlify Blobs.
+## 2. Configurar Supabase (una sola vez)
 
-## 2. Verificar que la API funciona
-
-Después del deploy, abre en el navegador:
-
-```
-https://TU-SITIO.netlify.app/api/menu
-```
-
-Debe devolver algo como `{"menu":[],"restName":"La Barrita"}`. Si ves un error 404, revisa que
-`netlify.toml` se haya subido junto con la carpeta `netlify/functions`.
+1. En el proyecto de Supabase, corre en el **SQL Editor** el script que crea las tablas
+   `menu_items` / `menu_settings`, el bucket `menu-photos` y sus políticas (RLS abierta, igual de
+   accesible que el Admin sin login).
+2. En Settings → API copia el **Project URL** y la **`anon` `public` key** (nunca la `service_role`
+   ni ninguna `secret key` — esas nunca deben ir en el código del sitio).
+3. En `index.html`, busca `SUPABASE_URL` y `SUPABASE_ANON_KEY` (al inicio del `<script>` principal)
+   y pon ahí esos dos valores.
 
 ## 3. Uso normal (PC / celular — administrar el menú)
 
