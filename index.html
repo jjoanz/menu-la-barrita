@@ -317,13 +317,10 @@ body.is-fs .pcontent{top:0}
    — crece/se achica junto con la tarjeta según el espacio real de la pantalla */
 .lb-cat-photo-strip{width:100%;min-height:70px;flex:1 1 40%;object-fit:cover;display:block;border-top:1px solid var(--proj-line)}
 
-/* Plato del Día es distinto al resto: la foto va AL LADO (derecha), no debajo — igual que en el cartel físico */
-.lb-cat-dia{flex-direction:row;align-items:stretch}
-.lb-cat-dia-main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}
+/* Plato del Día: mismo patrón "foto debajo" que el resto, con ítems un poco más grandes (destacado) */
 .lb-cat-dia .lb-cat-item{border-left:3px solid var(--oliv);padding-left:.75rem}
 .lb-cat-dia .lb-cat-name{font-size:clamp(.85rem,1.85vw,1.3rem);font-weight:700}
 .lb-cat-dia .lb-cat-price{font-size:clamp(.9rem,2vw,1.4rem)}
-.lb-cat-photo-side{width:clamp(160px,18vw,280px);flex-shrink:0;object-fit:cover;display:block}
 
 /* ── bottom strip ── */
 .lb-footer{
@@ -1045,17 +1042,12 @@ function lbItemRows(active,cat){
     `<div class="lb-cat-item"><div class="lb-cat-body"><span class="lb-cat-name">${escH(it.name)}</span>${it.desc?`<span class="lb-cat-desc">${escH(it.desc)}</span>`:''}</div>${it.price?`<div class="lb-cat-dots"></div><span class="lb-cat-price">${fmtPrice(it.price)}</span>`:''}</div>`
   ).join('');
 }
-/* Bebidas/Jugos Naturales/Batidas/Sándwiches & Más/Otros: foto debajo de la lista */
-function lbCatCell(active,cat){
+/* Todas las categorías (incluido Plato del Día) usan el mismo patrón: foto debajo de la lista */
+function lbCatCell(active,cat,extraClass,sub){
   const {label,icon}=CATS[cat];
   const photo=catImg[cat]?`<img class="lb-cat-photo-strip" src="${catImg[cat]}" alt="">`:'';
-  return `<div class="lb-cat"><div class="lb-cat-hdr"><span class="lb-cat-hdr-icon">${icon}</span><span class="lb-cat-hdr-name">${label}</span><div class="lb-cat-hdr-line"></div></div><div class="lb-cat-items">${lbItemRows(active,cat)}</div>${photo}</div>`;
-}
-/* Plato del Día: la foto va al lado (derecha), no debajo — así aparece en el cartel físico */
-function lbDiaCell(active){
-  const {label,icon}=CATS.diario;
-  const photo=catImg.diario?`<img class="lb-cat-photo-side" src="${catImg.diario}" alt="">`:'';
-  return `<div class="lb-cat lb-cat-dia"><div class="lb-cat-dia-main"><div class="lb-cat-hdr"><span class="lb-cat-hdr-icon">${icon}</span><span class="lb-cat-hdr-name">${label}</span><span class="lb-cat-hdr-sub">Lunes a Sábado</span><div class="lb-cat-hdr-line"></div></div><div class="lb-cat-items">${lbItemRows(active,'diario')}</div></div>${photo}</div>`;
+  const subHtml=sub?`<span class="lb-cat-hdr-sub">${escH(sub)}</span>`:'';
+  return `<div class="lb-cat${extraClass?' '+extraClass:''}"><div class="lb-cat-hdr"><span class="lb-cat-hdr-icon">${icon}</span><span class="lb-cat-hdr-name">${label}</span>${subHtml}<div class="lb-cat-hdr-line"></div></div><div class="lb-cat-items">${lbItemRows(active,cat)}</div>${photo}</div>`;
 }
 function renderList(){
   applyBranding();
@@ -1080,7 +1072,7 @@ function renderList(){
 
   el.innerHTML=
     `<div class="lb-grid lb-grid-top">${infoCell}${lbCatCell(active,'bebidas')}${lbCatCell(active,'jugos')}${lbCatCell(active,'batidas')}</div>`+
-    `<div class="lb-grid lb-grid-bottom">${lbDiaCell(active)}${lbCatCell(active,'sandwiches')}${lbCatCell(active,'otros')}</div>`;
+    `<div class="lb-grid lb-grid-bottom">${lbCatCell(active,'diario','lb-cat-dia','Lunes a Sábado')}${lbCatCell(active,'sandwiches')}${lbCatCell(active,'otros')}</div>`;
 }
 
 /* OFFERS */
