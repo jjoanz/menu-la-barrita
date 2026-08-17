@@ -232,8 +232,8 @@ body.is-fs .pcontent{top:0}
 /* ── cuadrícula fija: fila de arriba (info+Bebidas+Jugos+Batidas) y fila de abajo
      (Plato del Día+Sándwiches & Más+Otros) — todo visible a la vez, sin rotar ── */
 .lb-grid{display:grid;gap:.6rem;flex:1;min-height:0}
-.lb-grid-top{grid-template-columns:repeat(4,1fr)}
-.lb-grid-bottom{grid-template-columns:repeat(3,1fr)}
+.lb-grid-top{grid-template-columns:repeat(4,minmax(0,1fr))}
+.lb-grid-bottom{grid-template-columns:repeat(3,minmax(0,1fr))}
 
 /* ── celda de info: logo, sello "100% Casera" y horario ── */
 .lb-info-cell{
@@ -241,6 +241,7 @@ body.is-fs .pcontent{top:0}
   background:var(--proj-card);
   padding:.7rem .9rem;
   display:flex;flex-direction:column;gap:.55rem;
+  min-width:0;min-height:0;
 }
 .lb-info-flourish{width:100%;max-width:160px;height:14px;color:var(--gold-dk)}
 .lb-info-flourish svg{width:100%;height:100%;display:block}
@@ -263,7 +264,7 @@ body.is-fs .pcontent{top:0}
   border-radius:8px;overflow:hidden;
   display:flex;flex-direction:column;
   background:var(--proj-card);
-  min-height:0;
+  min-height:0;min-width:0;
 }
 .lb-cat-hdr{
   padding:.55rem .9rem .45rem;
@@ -781,30 +782,35 @@ function renderCatImgAdmin(){
     </div>`;
   }).join('');
 }
-function setCatImg(cat,input){
-  const file=input.files[0];if(!file)return;
-  resizeToBlob(file,900,650,.78,(blob,localPreview)=>{
-    const ph=document.getElementById(`cimgph-${cat}`);
-    if(ph){ph.style.backgroundImage=`url('${localPreview}')`;ph.textContent='';}
-    uploadPhoto(blob,`categories/${cat}.jpg`).then(async url=>{
-      if(!url)return;
-      /* catImg en memoria puede estar desactualizado si esto se dispara antes de que termine
-         la carga inicial — se relee del servidor para no pisar fotos de otras categorías */
-      catImg={...await fetchServerCatImg(),[cat]:url};
-      save();
-    });
-  });
-}
 async function fetchServerCatImg(){
   try{
     const {data:settings}=await sb.from('menu_settings').select('cat_img').eq('id',1).maybeSingle();
     return (settings&&settings.cat_img)||{};
   }catch(e){return catImg;}
 }
-async function clearCatImg(cat){
-  catImg=await fetchServerCatImg();
-  delete catImg[cat];
-  save();
+/* Cola: si se suben varias fotos de categoría seguidas, cada lectura+escritura debe
+   terminar antes de que empiece la siguiente — si no, la última en escribir pisa a
+   las demás (así se perdió la foto de Sándwiches & Más al subir 6 fotos rápido). */
+let catImgChain=Promise.resolve();
+function setCatImg(cat,input){
+  const file=input.files[0];if(!file)return;
+  resizeToBlob(file,900,650,.78,(blob,localPreview)=>{
+    const ph=document.getElementById(`cimgph-${cat}`);
+    if(ph){ph.style.backgroundImage=`url('${localPreview}')`;ph.textContent='';}
+    catImgChain=catImgChain.then(async()=>{
+      const url=await uploadPhoto(blob,`categories/${cat}.jpg`);
+      if(!url)return;
+      catImg={...await fetchServerCatImg(),[cat]:url};
+      await save();
+    }).catch(e=>console.error('Error guardando foto de categoría:',e));
+  });
+}
+function clearCatImg(cat){
+  catImgChain=catImgChain.then(async()=>{
+    catImg=await fetchServerCatImg();
+    delete catImg[cat];
+    await save();
+  }).catch(e=>console.error('Error quitando foto de categoría:',e));
 }
 
 /* ADMIN */
