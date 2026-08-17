@@ -287,7 +287,9 @@ body.is-fs .pcontent{top:0}
 }
 .lb-cat-hdr-sub{color:var(--proj-ink-soft);font-size:clamp(.6rem,.9vw,.8rem);letter-spacing:.05em;text-transform:uppercase}
 .lb-cat-hdr-line{flex:1;height:1px;background:var(--oliv);opacity:.4;margin-left:.4rem;align-self:center}
-.lb-cat-items{flex:1 1 auto;min-height:0}
+/* la lista de productos nunca se debe recortar: tamaño natural, no encoge — la foto cede el
+   espacio que sobre (o falte) después de que la lista completa ya esté visible */
+.lb-cat-items{flex:0 0 auto}
 .lb-cat-item{
   display:flex;align-items:center;
   padding:.4rem .9rem;
@@ -315,7 +317,7 @@ body.is-fs .pcontent{top:0}
 }
 /* foto de categoría, debajo de la lista (Bebidas/Jugos/Batidas/Sándwiches & Más/Otros)
    — crece/se achica junto con la tarjeta según el espacio real de la pantalla */
-.lb-cat-photo-strip{width:100%;min-height:70px;flex:1 1 40%;object-fit:contain;object-position:center;background:var(--proj-bg2);display:block;border-top:1px solid var(--proj-line)}
+.lb-cat-photo-strip{width:100%;min-height:0;flex:1 1 auto;object-fit:contain;object-position:center;background:var(--proj-bg2);display:block;border-top:1px solid var(--proj-line)}
 
 /* Plato del Día: mismo patrón "foto debajo" que el resto, con ítems un poco más grandes (destacado) */
 .lb-cat-dia .lb-cat-item{border-left:3px solid var(--oliv);padding-left:.75rem}
