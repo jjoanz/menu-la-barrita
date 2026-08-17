@@ -257,7 +257,7 @@ body.is-fs .pcontent{top:0}
   display:flex;align-items:stretch;
 }
 .lb-dia-main{flex:1;min-width:0;display:flex;flex-direction:column}
-.lb-dia-photo{width:clamp(130px,12vw,190px);flex-shrink:0;object-fit:cover;display:block}
+.lb-dia-photo{width:clamp(190px,20vw,320px);flex-shrink:0;object-fit:cover;display:block}
 .lb-dia-hdr{
   padding:.6rem 1.3rem .4rem;
   display:flex;align-items:baseline;gap:.6rem;
@@ -284,7 +284,7 @@ body.is-fs .pcontent{top:0}
   display:flex;align-items:center;gap:.6rem;
 }
 .lb-dia-img{width:clamp(34px,3vw,48px);height:clamp(34px,3vw,48px);border-radius:6px;object-fit:cover;flex-shrink:0;border:1px solid var(--proj-line)}
-.lb-dia-body{flex:1;min-width:0}
+.lb-dia-body{flex:0 1 auto;min-width:0}
 .lb-dia-name{font-family:'Montserrat',sans-serif;color:var(--proj-ink);font-size:clamp(.85rem,1.9vw,1.35rem);font-weight:700;display:block;line-height:1.2}
 .lb-dia-desc{color:var(--proj-ink-soft);font-size:clamp(.68rem,1.1vw,.95rem);display:block;margin-top:0}
 .lb-dia-dots{flex:1;min-width:8px;border-bottom:1.5px dotted var(--proj-line);margin:0 6px 4px;align-self:flex-end}
@@ -334,7 +334,7 @@ body.is-fs .pcontent{top:0}
   gap:.5rem;
 }
 .lb-cat-item:last-child{border-bottom:none}
-.lb-cat-body{flex:1;min-width:0}
+.lb-cat-body{flex:0 1 auto;min-width:0}
 .lb-cat-name{
   font-family:'Montserrat',sans-serif;color:var(--proj-ink);
   font-size:clamp(.8rem,1.7vw,1.15rem);font-weight:600;
@@ -773,13 +773,16 @@ async function uploadPhoto(blob,path){
   if(error){console.error('No se pudo subir la foto a Supabase Storage:',error);alert('No se pudo subir la foto, revisa tu conexión e inténtalo de nuevo.');return null;}
   return sb.storage.from('menu-photos').getPublicUrl(path).data.publicUrl;
 }
+/* La subida es async — si el usuario guarda antes de que termine, addItem/saveEdit esperan esta promesa por dataId */
+const pendingUpload={};
 function previewImg(input,phId,dataId){
   const file=input.files[0];if(!file)return;
   resizeToBlob(file,750,500,.73,(blob,localPreview)=>{
     const ph=document.getElementById(phId);
     if(ph)ph.outerHTML=`<img id="${phId}" class="imgprev" src="${localPreview}" onclick="document.getElementById('${input.id}').click()">`;
-    uploadPhoto(blob,`items/${Date.now()}-${Math.round(Math.random()*1e6)}.jpg`).then(url=>{
+    pendingUpload[dataId]=uploadPhoto(blob,`items/${Date.now()}-${Math.round(Math.random()*1e6)}.jpg`).then(url=>{
       if(url)document.getElementById(dataId).value=url;
+      delete pendingUpload[dataId];
     });
   });
 }
@@ -815,9 +818,15 @@ function clearCatImg(cat){
 }
 
 /* ADMIN */
-function addItem(){
+async function addItem(){
   const n=document.getElementById('f-name').value.trim();
   if(!n){flash('f-name');return;}
+  const btn=document.querySelector('.aform .btna');
+  if(pendingUpload['f-img-data']){
+    if(btn){btn.disabled=true;btn.textContent='Subiendo foto…';}
+    await pendingUpload['f-img-data'];
+    if(btn){btn.disabled=false;btn.textContent='Agregar al Menú';}
+  }
   menu.push({id:Date.now(),name:n,
     cat:document.getElementById('f-cat').value,
     price:document.getElementById('f-price').value.trim(),
@@ -852,10 +861,16 @@ function openEdit(id){
   }
   document.getElementById('emodal').classList.add('open');
 }
-function saveEdit(){
+async function saveEdit(){
   const id=+document.getElementById('e-id').value;
   const n=document.getElementById('e-name').value.trim();
   if(!n){flash('e-name');return;}
+  const btn=document.querySelector('#emodal .btnsv');
+  if(pendingUpload['e-img-data']){
+    if(btn){btn.disabled=true;btn.textContent='Subiendo foto…';}
+    await pendingUpload['e-img-data'];
+    if(btn){btn.disabled=false;btn.textContent='Guardar cambios';}
+  }
   const it=menu.find(i=>i.id===id);
   if(it){
     it.name=n;it.cat=document.getElementById('e-cat').value;
