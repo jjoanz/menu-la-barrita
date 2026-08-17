@@ -797,7 +797,9 @@ function setCatImg(cat,input){
     catImgChain=catImgChain.then(async()=>{
       const url=await uploadPhoto(blob,`categories/${cat}.jpg`);
       if(!url)return;
-      catImg={...await fetchServerCatImg(),[cat]:url};
+      /* el nombre de archivo es siempre el mismo (categories/cat.jpg) para poder sobrescribirlo;
+         se agrega ?v= con la hora para que el navegador/TV no sirva la foto vieja desde caché */
+      catImg={...await fetchServerCatImg(),[cat]:url+'?v='+Date.now()};
       await save();
     }).catch(e=>console.error('Error guardando foto de categoría:',e));
   });
