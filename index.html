@@ -716,7 +716,11 @@ function resizeToBlob(file,mw,mh,q,cb){
       let w=img.width,h=img.height;
       if(w/h>mw/mh){h=h*(mw/w);w=mw;}else{w=w*(mh/h);h=mh;}
       cv.width=Math.round(w);cv.height=Math.round(h);
-      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      const ctx=cv.getContext('2d');
+      /* JPEG no soporta transparencia — si la foto trae fondo transparente (ej. un PNG),
+         se rellena con el crema de marca en vez de dejar que el navegador lo pinte de negro */
+      ctx.fillStyle='#F6F0E4';ctx.fillRect(0,0,cv.width,cv.height);
+      ctx.drawImage(img,0,0,cv.width,cv.height);
       cv.toBlob(b=>cb(b,cv.toDataURL('image/jpeg',q)),'image/jpeg',q);
     };
     img.src=e.target.result;
