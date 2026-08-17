@@ -756,7 +756,9 @@ async function uploadPhoto(blob,path){
 const pendingUpload={};
 function previewImg(input,phId,dataId){
   const file=input.files[0];if(!file)return;
-  resizeToBlob(file,750,500,.73,(blob,localPreview)=>{
+  /* las fotos de plato se muestran a pantalla completa en el modo Animado (background-size:cover
+     sobre toda la TV) — 750x500 se veía borroso al estirarse, ahora se guarda en alta resolución */
+  resizeToBlob(file,1920,1280,.82,(blob,localPreview)=>{
     const ph=document.getElementById(phId);
     if(ph)ph.outerHTML=`<img id="${phId}" class="imgprev" src="${localPreview}" onclick="document.getElementById('${input.id}').click()">`;
     pendingUpload[dataId]=uploadPhoto(blob,`items/${Date.now()}-${Math.round(Math.random()*1e6)}.jpg`).then(url=>{
