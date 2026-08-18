@@ -15,7 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600;700;800;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
+html,body{height:100%;width:100%}
 :root{
   --red:#C8202A;--red-dk:#9B181F;--red-xdk:#6A0F14;
   --grn:#1A5C2A;--grn-dk:#124018;--grn-lt:#2E8A45;
@@ -103,7 +103,7 @@ body{font-family:'Montserrat',sans-serif;background:#f5f0e8;color:#2a1f0e}
 .empty{color:var(--muted);font-size:.82rem;font-style:italic;padding:10px 0;text-align:center}
 
 /* ══ MODAL ══ */
-.mback{display:none;position:fixed;inset:0;background:rgba(255, 253, 253, 0.6);z-index:200;align-items:center;justify-content:center}
+.mback{display:none;position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(255, 253, 253, 0.6);z-index:200;align-items:center;justify-content:center}
 .mback.open{display:flex}
 .modal{background:#fff;border-radius:14px;padding:1.75rem;width:92%;max-width:520px;box-shadow:0 24px 64px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
 .modal h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:1rem;color:#1a1208}
@@ -115,7 +115,7 @@ body{font-family:'Montserrat',sans-serif;background:#f5f0e8;color:#2a1f0e}
    P R O J E C T I O N
 ══════════════════════════════════════ */
 #proj-view{
-  display:none;position:fixed;inset:0;top:52px;
+  display:none;position:fixed;top:52px;right:0;bottom:0;left:0;
   background:var(--proj-bg);z-index:10;overflow:hidden;
 }
 
@@ -141,19 +141,19 @@ body.is-fs .pcontent{top:0}
 /* ─────────────────
    SLIDESHOW MODE
 ───────────────── */
-#mode-slide{position:absolute;inset:0;display:none}
+#mode-slide{position:absolute;top:0;right:0;bottom:0;left:0;display:none}
 #mode-slide.active{display:block}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;overflow:hidden;cursor:pointer}
+.slide{position:absolute;top:0;right:0;bottom:0;left:0;opacity:0;transition:opacity .9s ease;overflow:hidden;cursor:pointer}
 .slide.visible{opacity:1;z-index:2}
 .slide.out{opacity:0;z-index:1;transition:opacity .9s ease}
-.sbg{position:absolute;inset:0;background-size:cover;background-position:center}
+.sbg{position:absolute;top:0;right:0;bottom:0;left:0;background-size:cover;background-position:center}
 .sbg.kb{animation:kbz 9s ease-in-out forwards}
 @keyframes kbz{from{transform:scale(1)}to{transform:scale(1.06)}}
 .sgrad{
-  position:absolute;inset:0;
+  position:absolute;top:0;right:0;bottom:0;left:0;
   background:linear-gradient(to bottom,
-    rgba(246,240,228,0) 0%,rgba(246,240,228,.15) 35%,
-    rgba(246,240,228,.82) 62%,rgba(246,240,228,.98) 78%,var(--proj-bg) 100%
+    rgba(246,240,228,0) 0%,rgba(246,240,228,0) 72%,
+    rgba(246,240,228,.5) 84%,rgba(246,240,228,.9) 94%,var(--proj-bg) 100%
   );
 }
 /* línea dorada superior — mismo acento cálido que Lista/Ofertas, sin rojo */
@@ -213,7 +213,7 @@ body.is-fs .pcontent{top:0}
    LIST MODE  —  La Barrita brand, 32" TV
 ───────────────────────────────────────── */
 #mode-list{
-  position:absolute;inset:0;display:none;overflow:hidden;
+  position:absolute;top:0;right:0;bottom:0;left:0;display:none;overflow:hidden;
   background:var(--proj-bg);
   /* subtle diagonal texture */
   background-image:
@@ -342,7 +342,7 @@ body.is-fs .pcontent{top:0}
    OFFERS MODE
 ───────────────── */
 #mode-offers{
-  position:absolute;inset:0;display:none;padding:1.25rem 1.75rem;overflow-y:auto;
+  position:absolute;top:0;right:0;bottom:0;left:0;display:none;padding:1.25rem 1.75rem;overflow-y:auto;
   background:var(--proj-bg);
 }
 #mode-offers.active{display:block}
@@ -384,6 +384,44 @@ body.is-fs .pcontent{top:0}
 .bg-san{background:linear-gradient(135deg,#2e1c0d,#6b3a1a)}
 .bg-com{background:linear-gradient(135deg,#2e0d0d,#6b1a1a)}
 .bg-otr{background:linear-gradient(135deg,#1a1a1a,#3a3a3a)}
+
+/* ══ RESPONSIVE — Admin en celular ══ */
+@media (max-width:640px){
+  #nav{padding:0 .75rem;height:48px;gap:5px}
+  .logo{font-size:1.05rem}
+  .logo span{font-size:.52rem;padding:2px 6px;margin-left:4px}
+  .nbtn{padding:5px 9px;font-size:.66rem}
+
+  #admin-view{padding:1rem}
+  .ah h1{font-size:1.15rem}
+  .ah p{font-size:.76rem}
+
+  .rbar{flex-wrap:wrap;padding:.8rem 1rem}
+  .rbar input{flex:1 1 100%}
+  .rbar button{width:100%}
+
+  .aform{padding:1rem}
+  .frow.c2,.frow.c3{grid-template-columns:1fr}
+
+  .cimgs{gap:8px}
+  .cimgslot,.cimgph{width:calc(50% - 4px)}
+  .cimgph{height:70px}
+
+  .ffoot{flex-direction:column;align-items:stretch}
+  .ffoot .ochk{order:1}
+  .ffoot .btna{margin-left:0;order:2;width:100%}
+
+  .catf{gap:5px}
+  .cpill{padding:4px 11px;font-size:.7rem}
+
+  .ic{flex-wrap:wrap}
+  .icinfo{flex:1 1 60%}
+  .icact{flex:1 1 100%;justify-content:flex-end;margin-top:6px}
+
+  .modal{padding:1.25rem;width:94%}
+  .mact{flex-wrap:wrap}
+  .btncnl,.btnsv{flex:1}
+}
 </style>
 </head>
 
@@ -524,6 +562,7 @@ body.is-fs .pcontent{top:0}
       <div class="fg"><label>Nombre *</label><input type="text" id="e-name"></div>
       <div class="fg"><label>Categoría</label>
         <select id="e-cat">
+          <option value="diario">Plato del Día</option>
           <option value="bebidas">Bebidas</option>
           <option value="jugos">Jugos Naturales</option>
           <option value="batidas">Batidas</option>
@@ -628,6 +667,9 @@ let menu=[],restName='La Barrita',activeFilter=null,mode='slide',catImg={};
 /* se pone en true recién termina la carga inicial desde Supabase — evita que un save()
    disparado antes de tiempo (menu/catImg todavía incompletos) borre datos del servidor */
 let dataReady=false;
+/* solo true si la carga inicial realmente logró leer Supabase — evita que save() suba
+   datos locales desactualizados si la conexión falló al abrir la página */
+let supabaseOk=false;
 let si=0,stimer=null;
 const DUR=6500;
 const bc=typeof BroadcastChannel!=='undefined'?new BroadcastChannel('labarrita_menu'):null;
@@ -643,6 +685,13 @@ async function save(){
   renderAdmin();renderCurrent();
   if(bc)bc.postMessage({type:'upd',menu,restName,catImg});
   if(!dataReady){console.warn('save() a Supabase pospuesto: la carga inicial todavía no termina, se guardó solo local');return;}
+  if(!supabaseOk){
+    /* la carga inicial de Supabase falló (red/servidor) — si guardáramos ahora, subiríamos
+       el menú local desactualizado y borraríamos cambios hechos desde otro dispositivo */
+    console.error('No se pudo confirmar conexión con Supabase al cargar: cambio guardado solo local, NO se sincronizó.');
+    alert('No se pudo conectar con el servidor. Este cambio se guardó solo en este dispositivo y NO se sincronizó — revisa tu conexión y vuelve a intentarlo, o se podría perder.');
+    return;
+  }
   try{
     await sb.from('menu_items').delete().gt('id',0);
     if(menu.length)await sb.from('menu_items').insert(menu.map(toRow));
@@ -672,18 +721,16 @@ async function load(){
       document.getElementById('rest-name').value=restName;
       applyBranding();
     }
+    supabaseOk=true;
   }catch(e){console.error('No se pudo contactar Supabase, revisa SUPABASE_URL/SUPABASE_ANON_KEY:',e);}
   dataReady=true;
-  if(!menu.length){
-    /* Supabase y local vacíos (o inaccesibles): sembrar el menú inicial de La Barrita */
+  if(!menu.length&&supabaseOk){
+    /* Supabase confirmado vacío (primera vez que se usa el sitio): sembrar el menú inicial */
     menu=JSON.parse(JSON.stringify(DEFAULT_MENU));
     save();
-  }else if(!menu.some(i=>i.cat==='diario')){
-    /* Menú ya existente (guardado antes de que existiera "Plato del Día"): se agrega una sola vez */
-    const diaSeed=DEFAULT_MENU.filter(i=>i.cat==='diario').map(i=>({...i,id:Date.now()+Math.random()}));
-    menu=[...diaSeed,...menu];
-    save();
   }
+  /* nota: ya NO se vuelve a sembrar "Plato del Día" automáticamente si el admin lo borra por
+     completo — el admin tiene control total y nada se restaura solo */
   renderAdmin();renderCurrent();
 }
 
@@ -971,7 +1018,7 @@ function renderSlideshow(){
   const wrap=document.getElementById('slides-wrap');
   const dots=document.getElementById('sdots');
   if(!items.length){
-    wrap.innerHTML=`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--proj-ink-soft);font-style:italic;font-family:'Montserrat',sans-serif;">Sin platos en el menú</div>`;
+    wrap.innerHTML=`<div style="position:absolute;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;color:var(--proj-ink-soft);font-style:italic;font-family:'Montserrat',sans-serif;">Sin platos en el menú</div>`;
     dots.innerHTML='';stopSlide();return;
   }
   if(si>=items.length)si=0;
