@@ -1254,6 +1254,16 @@ setInterval(tick,1000);tick();
 startPolling();
 showView('proj');
 window.addEventListener('resize',()=>{if(mode==='list')fitListCanvas();});
+/* ResizeObserver: se dispara con cualquier cambio de tamaño real del stage (zoom del
+   navegador/kiosk incluido), a diferencia de window 'resize' que algunos navegadores TV
+   no disparan al cambiar el zoom — así el ajuste de zoom del Fully Kiosk sí se refleja */
+if(typeof ResizeObserver!=='undefined'){
+  const listStage=document.getElementById('list-stage');
+  if(listStage)new ResizeObserver(()=>{if(mode==='list')fitListCanvas();}).observe(listStage);
+}
+/* red de seguridad: reintenta el ajuste cada 3s mientras esté en modo Lista, por si el
+   dispositivo no soporta ResizeObserver ni dispara 'resize' con el zoom */
+setInterval(()=>{if(mode==='list')fitListCanvas();},3000);
 </script>
 </body>
 </html>
